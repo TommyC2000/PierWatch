@@ -18,7 +18,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src.config import DATA_MODE, DATA_DEMO, EXCEL_PATH
+from src.config import DATA_MODE, DATA_DEMO, EXCEL_PATH, DEMO_FALLBACK
 
 
 def is_data_available() -> bool:
@@ -43,7 +43,11 @@ def source_cache_key() -> tuple[str, str, float]:
 
 def show_mode_banner() -> None:
     """Show an info/warning banner for the current data mode (call near page top)."""
-    if DATA_MODE == "demo":
+    if DEMO_FALLBACK:
+        st.warning(
+            "Private monitoring data not available. Using synthetic demo data."
+        )
+    elif DATA_MODE == "demo":
         st.info(
             "**Demo mode:** using synthetic sample data. "
             "Not official monitoring records. "
