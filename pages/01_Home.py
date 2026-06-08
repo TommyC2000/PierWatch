@@ -7,138 +7,154 @@ def _monitoring_schematic() -> go.Figure:
     """
     Simplified, anonymized conceptual bridge monitoring schematic.
     Drawn entirely in code — no original plan image, no private geometry.
+    Warren truss panels for central spans; plain engineering-style linework.
     """
     fig = go.Figure()
-    deck_y = 3.5
 
-    # ── River / channel zone ─────────────────────────────────────────────────
+    chord_y = 2.8          # bottom chord / deck
+    top_y   = chord_y + 0.82  # truss top chord
+    e1, e2, e3 = 3.0, 6.0, 9.0
+    app_l, app_r = 0.8, 11.2
+
+    # ── Channel / water zone (very subtle fill + dashed water surface) ────────
     fig.add_shape(
-        type="rect", x0=2.3, y0=0.0, x1=7.7, y1=1.8,
-        fillcolor="rgba(173,216,230,0.35)",
-        line=dict(color="rgba(70,130,180,0.4)", width=1),
+        type="rect", x0=1.8, y0=0.0, x1=10.2, y1=1.45,
+        fillcolor="rgba(190,220,245,0.20)",
+        line=dict(color="rgba(90,150,200,0.30)", width=0.7),
         layer="below",
     )
+    fig.add_shape(
+        type="line", x0=1.8, y0=1.45, x1=10.2, y1=1.45,
+        line=dict(color="rgba(80,140,200,0.50)", width=0.9, dash="dot"),
+    )
     fig.add_annotation(
-        x=5.0, y=0.9, text="Generic river / channel zone",
-        showarrow=False, font=dict(size=10, color="#3a6ea5"),
-        bgcolor="rgba(255,255,255,0.55)",
+        x=6.0, y=0.6, text="channel",
+        showarrow=False, font=dict(size=8, color="rgba(55,105,165,0.60)"),
     )
 
-    # ── Deck line ────────────────────────────────────────────────────────────
+    # ── Bottom chord (full span) ──────────────────────────────────────────────
     fig.add_shape(
-        type="line", x0=0.0, y0=deck_y, x1=10.0, y1=deck_y,
-        line=dict(color="#2c2c2c", width=3.5),
-    )
-    # Thin top chord — suggests superstructure depth without truss detail
-    fig.add_shape(
-        type="line", x0=0.0, y0=deck_y + 0.35, x1=10.0, y1=deck_y + 0.35,
-        line=dict(color="#666666", width=1, dash="dot"),
+        type="line", x0=0.0, y0=chord_y, x1=12.0, y1=chord_y,
+        line=dict(color="#222222", width=1.8),
     )
 
-    # ── Approach piers — unlabeled, dashed ───────────────────────────────────
-    for xp in (0.5, 9.5):
+    # ── Warren truss panels (central spans only) ──────────────────────────────
+    def _truss(x0, x1, n=4):
+        pw = (x1 - x0) / n
+        fig.add_shape(                          # top chord
+            type="line", x0=x0, y0=top_y, x1=x1, y1=top_y,
+            line=dict(color="#3a3a3a", width=1.1),
+        )
+        for i in range(n):                      # Warren diagonals (no verticals)
+            xl, xr = x0 + i * pw, x0 + (i + 1) * pw
+            if i % 2 == 0:
+                fig.add_shape(type="line", x0=xl, y0=chord_y, x1=xr, y1=top_y,
+                              line=dict(color="#585858", width=0.85))
+            else:
+                fig.add_shape(type="line", x0=xl, y0=top_y, x1=xr, y1=chord_y,
+                              line=dict(color="#585858", width=0.85))
+
+    _truss(e1, e2)
+    _truss(e2, e3)
+
+    # ── Approach piers — unlabeled, thin dashed ───────────────────────────────
+    for xp in (app_l, app_r):
         fig.add_shape(
-            type="line", x0=xp, y0=0.0, x1=xp, y1=deck_y,
-            line=dict(color="#bbbbbb", width=2, dash="dot"),
+            type="line", x0=xp, y0=0.0, x1=xp, y1=chord_y,
+            line=dict(color="#c0c0c0", width=1.1, dash="dot"),
         )
 
     # ── Monitored piers: E1, E2, E3 ──────────────────────────────────────────
-    piers = {"E1": 3.0, "E2": 5.0, "E3": 7.0}
-    for label, xp in piers.items():
+    for xp in (e1, e2, e3):
         fig.add_shape(
-            type="line", x0=xp, y0=0.0, x1=xp, y1=deck_y,
-            line=dict(color="#333333", width=3),
+            type="line", x0=xp, y0=0.0, x1=xp, y1=chord_y,
+            line=dict(color="#2e2e2e", width=1.7),
         )
-        # Footing spread at base
-        fig.add_shape(
-            type="line", x0=xp - 0.3, y0=0.0, x1=xp + 0.3, y1=0.0,
-            line=dict(color="#333333", width=3),
-        )
-        fig.add_annotation(
-            x=xp, y=2.2, text=f"<b>{label}</b>",
-            showarrow=False, font=dict(size=12, color="#111111", family="monospace"),
-            bgcolor="rgba(255,255,255,0.82)", borderpad=2,
+        fig.add_shape(                          # footing spread
+            type="line", x0=xp - 0.22, y0=0.0, x1=xp + 0.22, y1=0.0,
+            line=dict(color="#2e2e2e", width=1.7),
         )
 
-    # ── GPS monitoring markers above deck ────────────────────────────────────
+    # ── Monitoring sensor dots at deck level ──────────────────────────────────
     fig.add_trace(go.Scatter(
-        x=[3.0, 5.0, 7.0],
-        y=[4.65, 4.65, 4.65],
-        mode="markers+text",
-        marker=dict(
-            symbol="triangle-up", size=13, color="#2ca02c",
-            line=dict(color="#1a7a1a", width=1),
-        ),
-        text=["GPS · E1", "GPS · E2", "GPS · E3"],
-        textposition="top center",
-        textfont=dict(size=9, color="#1a7a1a"),
-        showlegend=False,
-        hoverinfo="skip",
+        x=[e1, e2, e3], y=[chord_y, chord_y, chord_y],
+        mode="markers",
+        marker=dict(symbol="circle", size=7, color="#c0392b",
+                    line=dict(color="#922b21", width=1)),
+        showlegend=False, hoverinfo="skip",
     ))
 
-    # ── Device / joint labels at deck level ───────────────────────────────────
-    # Staggered slightly from pier centerlines to avoid overlap with GPS markers
-    device_y = deck_y + 0.6
-    devices = [
-        (1.5, "W2 Device",  "#7B3F00"),
-        (4.0, "PP15 Joint", "#8B0000"),
-        (5.3, "E2 Device",  "#8B0000"),
-        (7.3, "E3 Device",  "#8B0000"),
-    ]
-    for dx, dlabel, dcolor in devices:
+    # ── Pier labels below deck ────────────────────────────────────────────────
+    for label, xp in (("E1", e1), ("E2", e2), ("E3", e3)):
         fig.add_annotation(
-            x=dx, y=device_y, text=dlabel,
+            x=xp, y=chord_y - 0.38, text=f"<b>{label}</b>",
             showarrow=False,
-            font=dict(size=9, color=dcolor),
-            bgcolor="rgba(255,243,243,0.92)",
-            bordercolor=dcolor, borderwidth=1, borderpad=2,
+            font=dict(size=10, color="#1a1a1a"),
         )
 
-    # ── Movement response arrow ───────────────────────────────────────────────
-    # Arrow tail is 85 px to the left of arrowhead (pixel offset, no axref/ayref)
-    # Arrowhead points into the channel zone near E1, indicating pier movement direction
+    # ── Device labels — plain small italic text, no box ───────────────────────
+    dev_y = chord_y + 0.17
+    for dx, dlabel in [
+        (1.75,               "W2"),
+        ((e1 + e2) / 2,      "PP15"),
+        (e2 + 0.38,          "E2"),
+        (e3 + 0.38,          "E3"),
+    ]:
+        fig.add_annotation(
+            x=dx, y=dev_y, text=dlabel,
+            showarrow=False,
+            font=dict(size=7.5, color="#5a5a5a", style="italic"),
+        )
+
+    # ── GPS markers above truss top chord ────────────────────────────────────
+    fig.add_trace(go.Scatter(
+        x=[e1, e2, e3], y=[top_y + 0.30, top_y + 0.30, top_y + 0.30],
+        mode="markers+text",
+        marker=dict(symbol="triangle-up", size=7, color="#27ae60",
+                    line=dict(color="#1e8449", width=0.7)),
+        text=["GPS", "GPS", "GPS"],
+        textposition="top center",
+        textfont=dict(size=7, color="#27ae60"),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    # ── Movement arrow in channel zone (data-coordinate anchor) ───────────────
     fig.add_annotation(
-        x=4.1, y=1.3,
-        ax=-90, ay=0,
-        text="possible low-water<br>movement response",
-        showarrow=True, arrowhead=3, arrowsize=1.2,
-        arrowwidth=2, arrowcolor="#CC4400",
-        font=dict(size=9, color="#CC4400"),
-        bgcolor="rgba(255,255,255,0.88)", borderpad=3,
+        x=e1 + 1.6, y=0.92,       # arrowhead: in channel, right of E1
+        ax=e1 - 0.1, ay=0.92,     # text anchor: just left of E1 base
+        xref="x", yref="y", axref="x", ayref="y",
+        text="<i>low-water movement</i>",
+        showarrow=True, arrowhead=2, arrowsize=0.85,
+        arrowwidth=1.1, arrowcolor="#a84200",
+        font=dict(size=7.5, color="#a84200"),
     )
 
-    # ── West / East orientation labels ───────────────────────────────────────
+    # ── W / E orientation marks at deck edges ─────────────────────────────────
     fig.add_annotation(
-        x=0.0, y=deck_y, text="← West",
-        showarrow=False, font=dict(size=9, color="#888888"),
-        xanchor="right",
+        x=0.05, y=chord_y + 0.14, text="W",
+        showarrow=False, font=dict(size=8, color="#b0b0b0"), xanchor="left",
     )
     fig.add_annotation(
-        x=10.0, y=deck_y, text="East →",
-        showarrow=False, font=dict(size=9, color="#888888"),
-        xanchor="left",
+        x=11.95, y=chord_y + 0.14, text="E",
+        showarrow=False, font=dict(size=8, color="#b0b0b0"), xanchor="right",
     )
 
-    # ── Disclaimer ───────────────────────────────────────────────────────────
-    fig.add_annotation(
-        x=0.0, y=-0.6, xref="x", yref="y",
-        text="Conceptual schematic — not an original plan.",
-        showarrow=False, font=dict(size=9, color="#aaaaaa"), xanchor="left",
-    )
-
+    # ── Layout ────────────────────────────────────────────────────────────────
     fig.update_layout(
         title=dict(
             text="Engineering Background: Conceptual Monitoring Layout",
-            font=dict(size=13, color="#333333"),
-            x=0.5, xanchor="center",
+            font=dict(size=11.5, color="#3a3a3a"),
+            x=0.5, xanchor="center", y=0.99, yanchor="top",
         ),
-        height=390,
-        margin=dict(l=20, r=20, t=48, b=30),
-        xaxis=dict(visible=False, range=[-0.6, 10.6]),
-        yaxis=dict(visible=False, range=[-0.9, 6.3]),
-        plot_bgcolor="rgba(248,248,248,0.5)",
+        height=360,
+        margin=dict(l=8, r=8, t=36, b=8),
+        xaxis=dict(visible=False, range=[-0.5, 12.5]),
+        yaxis=dict(visible=False, range=[-0.65, 5.0]),
+        plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
+        hovermode=False,
     )
+    fig.update_traces(hoverinfo="skip", hovertemplate=None)
     return fig
 
 
@@ -169,15 +185,16 @@ Low River Stage → E-1 / E-2 Pier Movement Toward Channel → E-3 Joint Opening
 st.markdown("---")
 
 st.markdown(
-    "PierWatch is motivated by bridge monitoring cases where environmental loading, "
-    "support movement, and joint/device responses must be interpreted together. "
-    "The schematic below illustrates the monitoring workflow in a simplified and anonymized form."
+    "PierWatch is motivated by monitoring cases where water level, support movement, "
+    "and joint/device response need to be interpreted together."
 )
-st.plotly_chart(_monitoring_schematic(), use_container_width=True, key="home_schematic")
-st.caption(
-    "Simplified anonymized schematic for demonstration only. "
-    "Geometry, labels, and monitoring locations are conceptual and do not represent an original bridge plan."
+st.plotly_chart(
+    _monitoring_schematic(),
+    use_container_width=True,
+    key="home_schematic",
+    config={"displayModeBar": False},
 )
+st.caption("Conceptual schematic. Not an original bridge plan.")
 
 st.markdown("---")
 
