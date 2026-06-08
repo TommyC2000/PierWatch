@@ -1,0 +1,24 @@
+# Local-only continuity notes — not for public repo
+.local_notes/
+
+# Private data — never commit
+data/raw/
+*.xlsx
+*.xls
+*.docx
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
