@@ -14,7 +14,7 @@ THRESHOLDS_PATH = DATA_REFERENCE / "engineering_thresholds.yaml"
 # DATA_MODE controls which data source the app uses.
 # "local" — use real R1 workbook from data/raw/  (default, private/local use only)
 # "demo"  — use sanitized synthetic CSVs from data/demo/ (for public portfolio/GitHub)
-# To run in demo mode: PIERWATCH_DATA_MODE=demo streamlit run app.py
+# To run in demo mode: PIERWATCH_DATA_MODE=demo streamlit run PierWatch.py
 DATA_MODE: str = os.getenv("PIERWATCH_DATA_MODE", "local")
 
 

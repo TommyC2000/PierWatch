@@ -14,7 +14,7 @@ PierWatch is a screening-level SHM analytics prototype that demonstrates how riv
 
 ```bash
 pip install -r requirements.txt
-PIERWATCH_DATA_MODE=demo streamlit run app.py
+PIERWATCH_DATA_MODE=demo streamlit run PierWatch.py
 ```
 
 This runs the app with synthetic, anonymized demo data. No private files are needed.
@@ -121,7 +121,7 @@ To regenerate demo data from scratch:
 
 ```bash
 python scripts/create_demo_data.py
-PIERWATCH_DATA_MODE=demo streamlit run app.py
+PIERWATCH_DATA_MODE=demo streamlit run PierWatch.py
 ```
 
 See [`docs/PUBLIC_DEMO_MODE.md`](docs/PUBLIC_DEMO_MODE.md) for full details.
@@ -134,7 +134,7 @@ See [`docs/PUBLIC_DEMO_MODE.md`](docs/PUBLIC_DEMO_MODE.md) for full details.
 
 ```bash
 # Requires private monitoring workbook in data/raw/ — not included in public repo
-streamlit run app.py
+streamlit run PierWatch.py
 ```
 
 ---

@@ -22,10 +22,10 @@ Local mode uses the real R1 workbook. This is the default for private analysis.
 
 ```bash
 # Default — no environment variable needed
-streamlit run app.py
+streamlit run PierWatch.py
 
 # Or explicitly:
-PIERWATCH_DATA_MODE=local streamlit run app.py
+PIERWATCH_DATA_MODE=local streamlit run PierWatch.py
 ```
 
 Requirements:
@@ -72,7 +72,7 @@ Key new modules:
 ## Running in demo mode
 
 ```bash
-PIERWATCH_DATA_MODE=demo streamlit run app.py
+PIERWATCH_DATA_MODE=demo streamlit run PierWatch.py
 ```
 
 All pages (01–11) will display a demo-mode banner and load synthetic CSV data.
