@@ -1,0 +1,8 @@
+event_id,start_date,end_date,min_stage_ft,days_below_12,days_below_7,event_year,event_class
+LW-SYN-001,2005-12-07,2005-12-13,7.23,7,0,2005,Moderate
+LW-SYN-002,2015-01-09,2015-01-15,4.24,7,1,2015,Moderate
+LW-SYN-003,2016-10-12,2016-10-21,0.48,10,3,2016,Moderate
+LW-SYN-004,2018-12-27,2019-01-03,4.94,8,1,2018,Moderate
+LW-SYN-005,2022-09-17,2022-10-22,-3.0,36,32,2022,Extreme
+LW-SYN-006,2023-10-17,2024-01-15,-3.0,91,69,2023,Extreme
+LW-SYN-007,2025-09-23,2025-10-03,-0.23,11,9,2025,Moderate

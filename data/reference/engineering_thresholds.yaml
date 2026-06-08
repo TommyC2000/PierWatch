@@ -1,0 +1,27 @@
+river_stage:
+  movement_possible_ft: 12.0
+  movement_likely_ft: 7.0
+
+pp15:
+  default_remaining_allowable_movement_in: 0.5
+  watch_ratio: 0.50
+  critical_ratio: 0.80
+  span_jacking_likely_ratio: 1.00
+
+movement_rate:
+  low_in_per_day: 0.01
+  moderate_in_per_day: 0.02
+  high_in_per_day: 0.05
+  reference_2022_like_in_per_day: 0.10
+
+data_quality:
+  invalid_values:
+    - -7999
+    - -9999
+    - 9999
+  max_reasonable_jointmeter_abs_in: 200
+  max_reasonable_gps_abs_in: 50
+
+event_detection:
+  min_event_days: 3
+  merge_gap_days: 5
