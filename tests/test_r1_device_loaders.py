@@ -10,6 +10,8 @@ class R1DeviceLoadersTests(unittest.TestCase):
         self.excel_available = EXCEL_PATH.exists()
 
     def test_r1_workbook_exists(self):
+        if not self.excel_available:
+            self.skipTest("Private workbook is not included in the public repository.")
         self.assertTrue(
             self.excel_path.exists(),
             f"R1 workbook not found at {self.excel_path}"
