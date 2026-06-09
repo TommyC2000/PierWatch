@@ -1,3 +1,6 @@
+import base64
+from pathlib import Path
+
 import streamlit as st
 from src.data_sources import show_mode_banner
 
@@ -34,9 +37,21 @@ st.markdown(
 )
 
 st.markdown("#### Engineering Background: Conceptual Monitoring Layout")
-st.caption("Open image in a wider browser window for best viewing.")
-st.image("assets/conceptual_monitoring_layout.jpeg", use_container_width=True)
-st.caption("Sanitized monitoring layout for demonstration only.")
+
+_img_b64 = base64.b64encode(
+    Path("assets/conceptual_monitoring_layout.jpeg").read_bytes()
+).decode()
+st.markdown(
+    f"""
+    <div style="overflow-x:auto; width:100%; border:1px solid #ddd;
+                padding:8px; background:white;">
+        <img src="data:image/jpeg;base64,{_img_b64}"
+             style="max-width:none; width:auto; height:auto; min-width:1200px;" />
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+st.caption("Sanitized monitoring layout for demonstration only. Use horizontal scroll to view the full layout.")
 
 st.markdown("---")
 
