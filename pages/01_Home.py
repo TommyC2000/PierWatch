@@ -38,9 +38,9 @@ st.markdown(
 
 st.markdown("#### Engineering Background: Conceptual Monitoring Layout")
 
-_img_b64 = base64.b64encode(
-    Path("assets/conceptual_monitoring_layout.jpeg").read_bytes()
-).decode()
+_asset_path = Path(__file__).resolve().parents[1] / "assets" / "conceptual_monitoring_layout.jpeg"
+_img_bytes = _asset_path.read_bytes()
+_img_b64 = base64.b64encode(_img_bytes).decode()
 st.markdown(
     f"""
     <div style="overflow-x:auto; width:100%; border:1px solid #ddd;
@@ -52,6 +52,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.caption("Sanitized monitoring layout for demonstration only. Use horizontal scroll to view the full layout.")
+
+with st.expander("View full layout"):
+    st.image(_img_bytes, use_container_width=True)
+    st.caption("Full layout scaled to page width.")
+    st.download_button(
+        label="Download layout image",
+        data=_img_bytes,
+        file_name="conceptual_monitoring_layout.jpeg",
+        mime="image/jpeg",
+    )
 
 st.markdown("---")
 
