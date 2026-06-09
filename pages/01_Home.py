@@ -34,6 +34,7 @@ st.markdown(
 )
 
 st.markdown("#### Engineering Background: Conceptual Monitoring Layout")
+st.caption("Open image in a wider browser window for best viewing.")
 st.image("assets/conceptual_monitoring_layout.jpeg", use_container_width=True)
 st.caption("Sanitized monitoring layout for demonstration only.")
 
